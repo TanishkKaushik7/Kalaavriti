@@ -1,8 +1,8 @@
-const { useState } = React;
-const { Link } = ReactRouterDOM;
-const { Menu, Search, ShoppingBag, User } = lucideReact;
-const { Button } = window.Components;
-const { useCart } = window.Contexts;
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, Search, ShoppingBag, User } from 'lucide-react';
+import { Button } from '../ui/button';
+import { useCart } from '../../contexts/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -106,3 +106,5 @@ const Header = () => {
     </header>
   );
 };
+
+export default Header;

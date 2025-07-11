@@ -1,5 +1,5 @@
-// import { Link } from 'react-router-dom';
-// import { Card, CardContent } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
+import { Card, CardContent } from '../ui/card';
 
 const CategoryGrid = () => {
   const categories = [
