@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -13,6 +14,7 @@ const Footer = () => {
                   src="/lovable-uploads/35df65ad-5eb8-4af2-9079-38b33d739970.png" 
                   alt="Kalaavritti Logo" 
                   className="w-full h-full object-contain"
+                  loading="lazy"
                 />
               </div>
               <div>
@@ -25,13 +27,16 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <Link to="/social" className="text-white hover:text-secondary-light transition-colors">
-                Facebook
+                <span className="sr-only">Facebook</span>
+                <span aria-hidden="true">Facebook</span>
               </Link>
               <Link to="/social" className="text-white hover:text-secondary-light transition-colors">
-                Instagram
+                <span className="sr-only">Instagram</span>
+                <span aria-hidden="true">Instagram</span>
               </Link>
               <Link to="/social" className="text-white hover:text-secondary-light transition-colors">
-                Twitter
+                <span className="sr-only">Twitter</span>
+                <span aria-hidden="true">Twitter</span>
               </Link>
             </div>
           </div>
@@ -40,11 +45,22 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Home</Link></li>
-              <li><Link to="/shop" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Shop</Link></li>
-              <li><Link to="/trainings" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Trainings</Link></li>
-              <li><Link to="/about" className="text-sm opacity-90 hover:opacity-100 transition-opacity">About Us</Link></li>
-              <li><Link to="/blog" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Blog</Link></li>
+              {[
+                { path: '/', text: 'Home' },
+                { path: '/shop', text: 'Shop' },
+                { path: '/trainings', text: 'Trainings' },
+                { path: '/about', text: 'About Us' },
+                { path: '/blog', text: 'Blog' }
+              ].map((link) => (
+                <li key={link.path}>
+                  <Link 
+                    to={link.path} 
+                    className="text-sm opacity-90 hover:opacity-100 transition-opacity block"
+                  >
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -52,11 +68,22 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Categories</h4>
             <ul className="space-y-2">
-              <li><Link to="/shop/jewelry" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Jewelry</Link></li>
-              <li><Link to="/shop/rakhis" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Rakhis</Link></li>
-              <li><Link to="/shop/home-decor" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Home Décor</Link></li>
-              <li><Link to="/shop/paintings" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Paintings</Link></li>
-              <li><Link to="/shop/gifts" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Gifts</Link></li>
+              {[
+                { path: '/shop/jewelry', text: 'Jewelry' },
+                { path: '/shop/rakhis', text: 'Rakhis' },
+                { path: '/shop/home-decor', text: 'Home Décor' },
+                { path: '/shop/paintings', text: 'Paintings' },
+                { path: '/shop/gifts', text: 'Gifts' }
+              ].map((link) => (
+                <li key={link.path}>
+                  <Link 
+                    to={link.path} 
+                    className="text-sm opacity-90 hover:opacity-100 transition-opacity block"
+                  >
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -64,11 +91,22 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2">
-              <li><Link to="/contact" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Contact Us</Link></li>
-              <li><Link to="/shipping" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Shipping Info</Link></li>
-              <li><Link to="/returns" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Returns</Link></li>
-              <li><Link to="/faq" className="text-sm opacity-90 hover:opacity-100 transition-opacity">FAQ</Link></li>
-              <li><Link to="/privacy" className="text-sm opacity-90 hover:opacity-100 transition-opacity">Privacy Policy</Link></li>
+              {[
+                { path: '/contact', text: 'Contact Us' },
+                { path: '/shipping', text: 'Shipping Info' },
+                { path: '/returns', text: 'Returns' },
+                { path: '/faq', text: 'FAQ' },
+                { path: '/privacy', text: 'Privacy Policy' }
+              ].map((link) => (
+                <li key={link.path}>
+                  <Link 
+                    to={link.path} 
+                    className="text-sm opacity-90 hover:opacity-100 transition-opacity block"
+                  >
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -76,7 +114,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 mt-8 pt-8 text-center">
           <p className="text-sm opacity-80">
-            © 2024 Kalaavritti. All rights reserved. Made with ❤️ for Indian artisans.
+            © {new Date().getFullYear()} Kalaavritti. All rights reserved. Made with ❤️ for Indian artisans.
           </p>
         </div>
       </div>
