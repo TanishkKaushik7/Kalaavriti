@@ -4,74 +4,14 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { useCart } from '../contexts/CartContext';
+import { products } from '../data/products';
+import { Link } from 'react-router-dom';
 
 const Shop = () => {
   const { addItem } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
 
-  const products = [
-    {
-      id: "1",
-      name: "Traditional Silver Necklace",
-      price: 2999,
-      originalPrice: 3499,
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&crop=center",
-      artisan: "Meera Sharma",
-      category: "jewelry",
-      badge: "Bestseller"
-    },
-    {
-      id: "2",
-      name: "Handwoven Silk Rakhi Set",
-      price: 899,
-      originalPrice: 1199,
-      image: "https://images.unsplash.com/photo-1597149379930-6c70c4e41d6f?w=400&h=400&fit=crop&crop=center",
-      artisan: "Rajesh Kumar",
-      category: "rakhis",
-      badge: "Limited Edition"
-    },
-    {
-      id: "3",
-      name: "Madhubani Canvas Painting",
-      price: 1899,
-      originalPrice: 2299,
-      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop&crop=center",
-      artisan: "Sunita Devi",
-      category: "paintings",
-      badge: "New Arrival"
-    },
-    {
-      id: "4",
-      name: "Brass Home Décor Set",
-      price: 1599,
-      originalPrice: 1899,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop&crop=center",
-      artisan: "Amit Verma",
-      category: "home-decor",
-      badge: "Popular"
-    },
-    {
-      id: "5",
-      name: "Embroidered Cushion Covers",
-      price: 799,
-      originalPrice: 999,
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop&crop=center",
-      artisan: "Kavita Singh",
-      category: "textiles",
-      badge: "Handmade"
-    },
-    {
-      id: "6",
-      name: "Wooden Carved Elephants",
-      price: 1299,
-      originalPrice: 1599,
-      image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&h=400&fit=crop&crop=center",
-      artisan: "Ravi Patel",
-      category: "gifts",
-      badge: "Eco-friendly"
-    }
-  ];
 
   const categories = [
     { value: 'all', label: 'All Categories' },
@@ -99,21 +39,22 @@ const Shop = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/20 to-background">
+    <div className="container mx-auto px-4 py-12">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">
-          Our <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Collection</span>
+      <div className="mb-12 text-center">
+        <h1 className="heading-primary mb-6">
+          Our <span className="text-gradient-brand">Collection</span>
         </h1>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
           Discover handcrafted treasures from talented artisans across India
         </p>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-6 mb-12 justify-center">
         <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="w-full sm:w-[250px] border-gradient">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
           <SelectContent>
@@ -126,7 +67,7 @@ const Shop = () => {
         </Select>
 
         <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="w-full sm:w-[200px]">
+          <SelectTrigger className="w-full sm:w-[250px] border-gradient">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
@@ -139,43 +80,44 @@ const Shop = () => {
       </div>
 
       {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredProducts.map((product) => (
-          <Card key={product.id} className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {filteredProducts.map((product, index) => (
+          <Link to={`/product/${product.id}`} key={product.id}>
+          <Card className={`product-card card-enhanced hover-lift stagger-animation`} style={{animationDelay: `${index * 0.05}s`}}>
             <div className="relative">
               <img 
                 src={product.image} 
                 alt={product.name}
-                className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                className="product-image w-full h-56 object-cover"
               />
-              <Badge className="absolute top-3 left-3 bg-primary text-white">
+              <Badge className="absolute top-4 left-4 bg-gradient-brand text-white shadow-lg">
                 {product.badge}
               </Badge>
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all duration-300">
+              <div className="product-overlay">
                 <Button 
                   onClick={() => handleAddToCart(product)}
-                  className="bg-white text-primary hover:bg-primary hover:text-white transition-colors"
+                  className="btn-primary shadow-glow-primary"
                 >
                   Add to Cart
                 </Button>
               </div>
             </div>
             
-            <CardContent className="p-4">
-              <div className="space-y-2">
-                <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+            <CardContent className="p-6">
+              <div className="space-y-3">
+                <h3 className="font-bold text-xl line-clamp-2 group-hover:text-gradient-primary transition-colors">
                   {product.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm font-medium text-muted-foreground">
                   by {product.artisan}
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-2xl font-bold text-gradient-primary">
                       ₹{product.price.toLocaleString()}
                     </span>
                     {product.originalPrice > product.price && (
-                      <span className="text-sm text-muted-foreground line-through">
+                      <span className="text-base text-muted-foreground line-through">
                         ₹{product.originalPrice.toLocaleString()}
                       </span>
                     )}
@@ -184,15 +126,17 @@ const Shop = () => {
               </div>
             </CardContent>
           </Card>
+          </Link>
         ))}
       </div>
 
       {/* Load More */}
       <div className="text-center mt-12">
-        <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+        <Button size="lg" className="btn-secondary hover-lift text-lg px-8 py-4">
           Load More Products
         </Button>
       </div>
+    </div>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Trainings from "./pages/Trainings";
 import Blog from "./pages/Blog";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 // Create a new QueryClient instance
@@ -35,6 +36,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/trainings" element={<Trainings />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

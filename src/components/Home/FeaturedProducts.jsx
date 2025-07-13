@@ -3,53 +3,14 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { useCart } from '../../contexts/CartContext';
+import { products } from '../../data/products';
+import { Link } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const { addItem } = useCart();
   const [hoveredProduct, setHoveredProduct] = useState(null);
 
-  const products = [
-    {
-      id: "1",
-      name: "Traditional Silver Necklace",
-      price: 2999,
-      originalPrice: 3499,
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&crop=center",
-      artisan: "Meera Sharma",
-      category: "Jewelry",
-      badge: "Bestseller"
-    },
-    {
-      id: "2",
-      name: "Handwoven Silk Rakhi Set",
-      price: 899,
-      originalPrice: 1199,
-      image: "https://images.unsplash.com/photo-1597149379930-6c70c4e41d6f?w=400&h=400&fit=crop&crop=center",
-      artisan: "Rajesh Kumar",
-      category: "Rakhis",
-      badge: "Limited Edition"
-    },
-    {
-      id: "3",
-      name: "Madhubani Canvas Painting",
-      price: 1899,
-      originalPrice: 2299,
-      image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop&crop=center",
-      artisan: "Sunita Devi",
-      category: "Paintings",
-      badge: "New Arrival"
-    },
-    {
-      id: "4",
-      name: "Brass Home Décor Set",
-      price: 1599,
-      originalPrice: 1899,
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop&crop=center",
-      artisan: "Amit Verma",
-      category: "Home Décor",
-      badge: "Popular"
-    }
-  ];
+  const featuredProducts = products.slice(0, 4);
 
   const handleAddToCart = (product) => {
     addItem({
@@ -63,22 +24,24 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-accent/30">
+    <section className="py-24 bg-gradient-to-b from-background via-accent/20 to-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">
-            Featured <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Products</span>
+          <h2 className="heading-secondary mb-6">
+            Featured <span className="text-gradient-brand">Products</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Handpicked treasures from our most talented artisans, each piece crafted with love and tradition.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {featuredProducts.map((product, index) => (
+            <Link to={`/product/${product.id}`} key={product.id}>
             <Card 
               key={product.id} 
-              className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer"
+              className={`product-card card-enhanced hover-lift stagger-animation cursor-pointer`}
+              style={{animationDelay: `${index * 0.1}s`}}
               onMouseEnter={() => setHoveredProduct(product.id)}
               onMouseLeave={() => setHoveredProduct(null)}
             >
@@ -86,56 +49,57 @@ const FeaturedProducts = () => {
                 <img 
                   src={product.image} 
                   alt={product.name}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="product-image w-full h-56 object-cover"
                 />
-                <Badge className="absolute top-3 left-3 bg-primary text-white">
+                <Badge className="absolute top-4 left-4 bg-gradient-brand text-white shadow-lg">
                   {product.badge}
                 </Badge>
-                {hoveredProduct === product.id && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center transition-all duration-300">
+                <div className="product-overlay">
                     <Button 
                       onClick={() => handleAddToCart(product)}
-                      className="bg-white text-primary hover:bg-primary hover:text-white transition-colors"
+                      className="btn-primary shadow-glow-primary"
                     >
                       Add to Cart
                     </Button>
-                  </div>
-                )}
+                </div>
               </div>
               
-              <CardContent className="p-4">
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <h3 className="font-bold text-xl line-clamp-2 group-hover:text-gradient-primary transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-medium text-muted-foreground">
                     by {product.artisan}
                   </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <span className="text-xl font-bold text-primary">
+                      <span className="text-2xl font-bold text-gradient-primary">
                         ₹{product.price.toLocaleString()}
                       </span>
                       {product.originalPrice > product.price && (
-                        <span className="text-sm text-muted-foreground line-through">
+                        <span className="text-base text-muted-foreground line-through">
                           ₹{product.originalPrice.toLocaleString()}
                         </span>
                       )}
                     </div>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-xs border-primary/20">
                       {product.category}
                     </Badge>
                   </div>
                 </div>
               </CardContent>
             </Card>
+            </Link>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
+          <Link to="/shop">
+          <Button size="lg" className="btn-secondary hover-lift text-lg px-8 py-4">
             View All Products
           </Button>
+          </Link>
         </div>
       </div>
     </section>
