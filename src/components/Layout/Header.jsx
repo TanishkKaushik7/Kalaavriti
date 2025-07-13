@@ -18,7 +18,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-background border-b sticky top-0 z-50">
+    <header className="bg-background border-b fixed top-0 left-0 right-0 z-50">
       <div className="bg-gradient-to-r from-primary to-secondary py-2">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-white">
@@ -32,14 +32,14 @@ const Header = () => {
           <Link to="/" className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-full border-2 border-secondary p-1 bg-white">
               <img
-                src="/lovable-uploads/35df65ad-5eb8-4af2-9079-38b33d739970.png"
+                src="/35df65ad-5eb8-4af2-9079-38b33d739970.png"
                 alt="Kalaavritti Logo"
                 className="w-full h-full object-contain"
               />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></h1>
-              <p className="text-xs text-muted-foreground -mt-1"></p>
+              <h1 className="text-2xl font-bold text-gradient-brand">Kalaavritti</h1>
+              <p className="text-xs text-muted-foreground -mt-1">Where Stories Take Shape</p>
             </div>
           </Link>
 

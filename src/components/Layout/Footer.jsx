@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-10 h-10 rounded-full border-2 border-white p-1 bg-white">
                 <img 
-                  src="/lovable-uploads/35df65ad-5eb8-4af2-9079-38b33d739970.png" 
+                  src="/35df65ad-5eb8-4af2-9079-38b33d739970.png" 
                   alt="Kalaavritti Logo" 
                   className="w-full h-full object-contain"
                   loading="lazy"
