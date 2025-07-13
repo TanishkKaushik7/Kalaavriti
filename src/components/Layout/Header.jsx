@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Search, ShoppingBag, User } from 'lucide-react';
+import { Menu, Search, User } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useCart } from '../../contexts/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { itemCount } = useCart();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -18,91 +16,66 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-background border-b fixed top-0 left-0 right-0 z-50">
-      <div className="bg-gradient-to-r from-primary to-secondary py-2">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-white">
-            Free shipping on orders above ₹999 | Use code: ARTISAN10 for 10% off
-          </p>
+    <header className="sticky top-0 left-0 right-0 z-50 bg-white shadow-xl border-b border-[#0097B2]/20 m-0 p-0">
+      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center space-x-3 group">
+          <img
+            src="/logo-kalaavritti.png"
+            alt="Kalaavritti Logo"
+            className="h-20 w-auto object-contain"
+            style={{marginBottom: 0}}
+          />
+        </Link>
+
+        {/* Navigation */}
+        <nav className="hidden md:flex items-center space-x-8">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              to={item.path}
+              className="text-lg font-semibold text-[#8F0557] hover:text-[#0097B2] transition-colors px-2 py-1 rounded-lg hover:bg-[#0097B2]/10"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Actions */}
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" size="icon">
+            <Search className="h-5 w-5 text-[#0097B2]" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <User className="h-5 w-5 text-[#8F0557]" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <Menu className="h-5 w-5 text-[#0097B2]" />
+          </Button>
         </div>
       </div>
-
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-full border-2 border-secondary p-1 bg-white">
-              <img
-                src="/35df65ad-5eb8-4af2-9079-38b33d739970.png"
-                alt="Kalaavritti Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gradient-brand">Kalaavritti</h1>
-              <p className="text-xs text-muted-foreground -mt-1">Where Stories Take Shape</p>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center space-x-8">
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <nav className="md:hidden mt-4 pb-4 border-t pt-4 bg-white shadow-xl">
+          <div className="flex flex-col space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="text-lg font-semibold text-[#8F0557] hover:text-[#0097B2] transition-colors px-4 py-2 rounded-lg hover:bg-[#0097B2]/10"
+                onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
-
-            <Link to="/cart">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingBag className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
           </div>
-        </div>
-
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t pt-4">
-            <div className="flex flex-col space-y-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="text-foreground hover:text-primary transition-colors font-medium py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </nav>
-        )}
-      </div>
+        </nav>
+      )}
     </header>
   );
 };
