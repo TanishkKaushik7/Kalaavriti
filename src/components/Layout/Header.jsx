@@ -18,7 +18,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-background border-b sticky top-0 z-50">
+    <header className="bg-background border-b fixed top-0 left-0 right-0 z-50">
       <div className="bg-gradient-to-r from-primary to-secondary py-2">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-white">

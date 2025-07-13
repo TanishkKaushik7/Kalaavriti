@@ -4,6 +4,8 @@ import { TooltipProvider } from "../src/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "../src/contexts/CartContext";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 import Index from "../src/pages/Index";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
@@ -28,6 +30,9 @@ function App() {
           
           {/* Router setup */}
           <BrowserRouter>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1 pt-[120px]">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/shop" element={<Shop />} />
@@ -39,6 +44,9 @@ function App() {
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+              </main>
+              <Footer />
+            </div>
           </BrowserRouter>
         </TooltipProvider>
       </CartProvider>
