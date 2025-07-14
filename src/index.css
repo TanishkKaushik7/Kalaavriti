@@ -1,5 +1,8 @@
 @import "tailwindcss";
-
+[data-sonner-toaster] {
+  top: 0 !important;
+  inset-inline: 0 !important;
+}
 @layer base {
   :root {
     --primary: 324 88% 20%; /* #8F0557 */

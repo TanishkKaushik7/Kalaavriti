@@ -17,13 +17,17 @@ export function Toaster() {
         <Toast key={id} {...props}>
           <div className="grid gap-1">
             {title && <ToastTitle>{title}</ToastTitle>}
-            {description && <ToastDescription>{description}</ToastDescription>}
+            {description && (
+              <ToastDescription>{description}</ToastDescription>
+            )}
           </div>
           {action}
           <ToastClose />
         </Toast>
       ))}
-      <ToastViewport />
+      <ToastViewport 
+        className="[--viewport-padding:_0px] top-0 left-0 right-0" 
+      />
     </ToastProvider>
   );
 }

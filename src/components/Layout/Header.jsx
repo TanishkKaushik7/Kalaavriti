@@ -24,18 +24,12 @@ const Header = () => {
         {/* Logo */}
         <a href="/" className="flex items-center space-x-3 group">
           <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur"></div>
+            <div className="absolute -inset-2  rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur"></div>
             <img
               src="/logo-kalaavritti.png"
               alt="Kalaavritti Logo"
-              className="relative h-16 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-lg"
+              className="relative h-23 w-auto px-5 xobject-contain "
             />
-          </div>
-          <div className="hidden sm:flex flex-col">
-            <span className="text-xl font-bold bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text text-transparent tracking-wide">
-              KALAAVRITTI
-            </span>
-            <span className="text-xs text-gray-500 font-medium">Where Stories Take Shape</span>
           </div>
         </a>
 
