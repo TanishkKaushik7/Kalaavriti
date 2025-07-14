@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, Search, ShoppingBag, User } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useCart } from '../../contexts/CartContext';
+import { Menu, Search, User, ShoppingBag, X } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { itemCount } = useCart();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const items = []; // Mock cart items - replace with actual cart context
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -17,91 +16,140 @@ const Header = () => {
     { name: 'Blog', path: '/blog' },
   ];
 
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
-    <header className="bg-background border-b sticky top-0 z-50">
-      <div className="bg-gradient-to-r from-primary to-secondary py-2">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-white">
-            Free shipping on orders above ₹999 | Use code: ARTISAN10 for 10% off
-          </p>
+    <header className="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-lg border-b border-gradient-to-r from-pink-500/10 to-blue-500/10 m-0 p-0">
+      <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="flex items-center space-x-3 group">
+          <div className="relative">
+            <div className="absolute -inset-2 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur"></div>
+            <img
+              src="/logo-kalaavritti.png"
+              alt="Kalaavritti Logo"
+              className="relative h-16 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-lg"
+            />
+          </div>
+          <div className="hidden sm:flex flex-col">
+            <span className="text-xl font-bold bg-gradient-to-r from-pink-600 to-blue-600 bg-clip-text text-transparent tracking-wide">
+              KALAAVRITTI
+            </span>
+            <span className="text-xs text-gray-500 font-medium">Where Stories Take Shape</span>
+          </div>
+        </a>
+
+        {/* Navigation */}
+        <nav className="hidden lg:flex items-center space-x-2">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.path}
+              className="relative group px-4 py-2 text-sm font-semibold text-gray-700 hover:text-pink-600 transition-all duration-300 rounded-lg hover:bg-pink-50"
+            >
+              {item.name}
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-blue-500 group-hover:w-full group-hover:left-0 transition-all duration-300 rounded-full"></span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Actions */}
+        <div className="flex items-center space-x-2">
+          {/* Search */}
+          <div className="relative">
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110 group"
+            >
+              <Search className="h-5 w-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+            </button>
+            
+            {/* Search dropdown */}
+            {isSearchOpen && (
+              <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 transform transition-all duration-300 animate-in slide-in-from-top-2">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
+                    autoFocus
+                  />
+                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                </div>
+                <div className="mt-3 text-sm text-gray-500">
+                  Popular searches: Pottery, Textiles, Jewelry
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* User */}
+          <button className="p-2 hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110 group">
+            <User className="h-5 w-5 text-gray-600 group-hover:text-pink-600 transition-colors" />
+          </button>
+
+          {/* Cart */}
+          <button
+            onClick={() => setCartOpen(!cartOpen)}
+            className="relative p-2 hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110 group"
+          >
+            <ShoppingBag className="h-5 w-5 text-gray-600 group-hover:text-pink-600 transition-colors" />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                {totalItems}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-full transition-all duration-200 hover:scale-110 group"
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5 text-gray-600 group-hover:text-pink-600 transition-colors" />
+            ) : (
+              <Menu className="h-5 w-5 text-gray-600 group-hover:text-pink-600 transition-colors" />
+            )}
+          </button>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-full border-2 border-secondary p-1 bg-white">
-              <img
-                src="/lovable-uploads/35df65ad-5eb8-4af2-9079-38b33d739970.png"
-                alt="Kalaavritti Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"></h1>
-              <p className="text-xs text-muted-foreground -mt-1"></p>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
+      {/* Mobile Menu */}
+      <div className={`lg:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+        <nav className="px-6 py-4 bg-white border-t border-gray-100">
+          <div className="flex flex-col space-y-1">
+            {navItems.map((item, index) => (
+              <a
                 key={item.name}
-                to={item.path}
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                href={item.path}
+                className="group relative px-4 py-3 text-sm font-semibold text-gray-700 hover:text-pink-600 transition-all duration-300 rounded-lg hover:bg-pink-50"
+                onClick={() => setIsMenuOpen(false)}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {item.name}
-              </Link>
+                <span className="relative z-10">{item.name}</span>
+                <div className="absolute left-0 top-0 w-1 h-0 bg-gradient-to-b from-pink-500 to-blue-500 group-hover:h-full transition-all duration-300 rounded-full"></div>
+              </a>
             ))}
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
-            </Button>
-
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
-
-            <Link to="/cart">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingBag className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </Button>
-            </Link>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
           </div>
-        </div>
-
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t pt-4">
-            <div className="flex flex-col space-y-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="text-foreground hover:text-primary transition-colors font-medium py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
+          
+          {/* Mobile search */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300"
+              />
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
             </div>
-          </nav>
-        )}
+          </div>
+        </nav>
+      </div>
+
+      {/* Subtle animated underline */}
+      <div className="h-0.5 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-30">
+        <div className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 animate-pulse"></div>
       </div>
     </header>
   );
