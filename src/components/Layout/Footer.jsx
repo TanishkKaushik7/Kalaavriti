@@ -36,13 +36,13 @@ const Footer = () => {
               <div className="relative group">
                 <div className="absolute -inset-2 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
                 <img 
-                  src="/logo-kalaavritti.png" 
+                  src="/logo.png" 
                   alt="Kalaavritti Logo" 
                   className="relative w-16 h-16 mb-4 drop-shadow-2xl group-hover:scale-110 transition-transform duration-300" 
                 />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2 tracking-wide">
-                KALAAVRITTI
+                KalaaVritti
               </h3>
               <p className="text-pink-200 text-sm font-medium italic">
                 Where Stories Take Shape
