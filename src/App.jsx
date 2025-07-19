@@ -9,42 +9,45 @@ import Footer from "./components/Layout/Footer";
 import CartDrawer from "./components/Layout/CartDrawer";
 import { ShoppingBag } from 'lucide-react';
 
-// Improved lazy loading with better loading states
-const lazyWithRetry = (componentImport) => {
-  return lazy(async () => {
-    const pageHasAlreadyBeenForceRefreshed = 
-      JSON.parse(window.localStorage.getItem('page-has-been-force-refreshed') || 'false');
-    
-    try {
-      const component = await componentImport();
-      window.localStorage.setItem('page-has-been-force-refreshed', 'false');
-      return component;
-    } catch (error) {
-      if (!pageHasAlreadyBeenForceRefreshed) {
-        window.localStorage.setItem('page-has-been-force-refreshed', 'true');
-        return window.location.reload();
-      }
-      throw error;
-    }
-  });
+// Enhanced lazy loading with preloading capability
+const createLazyRoute = (componentImport) => {
+  const LazyComponent = lazy(componentImport);
+  const preload = componentImport; // The import function itself can be used for preloading
+  
+  return {
+    LazyComponent,
+    preload
+  };
 };
 
-// Lazy loaded components with retry mechanism
-const Index = lazyWithRetry(() => import("../src/pages/Index"));
-const Shop = lazyWithRetry(() => import("./pages/Shop"));
-const Cart = lazyWithRetry(() => import("./pages/Cart"));
-const About = lazyWithRetry(() => import("./pages/About"));
-const Contact = lazyWithRetry(() => import("./pages/Contact"));
-const Trainings = lazyWithRetry(() => import("./pages/Trainings"));
-const Blog = lazyWithRetry(() => import("./pages/Blog"));
-const ProductDetail = lazyWithRetry(() => import("./pages/ProductDetail"));
-const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
+// Create lazy routes with preloading
+const Index = createLazyRoute(() => import("../src/pages/Index"));
+const Shop = createLazyRoute(() => import("./pages/Shop"));
+const Cart = createLazyRoute(() => import("./pages/Cart"));
+const About = createLazyRoute(() => import("./pages/About"));
+const Contact = createLazyRoute(() => import("./pages/Contact"));
+const Trainings = createLazyRoute(() => import("./pages/Trainings"));
+const Blog = createLazyRoute(() => import("./pages/Blog"));
+const ProductDetail = createLazyRoute(() => import("./pages/ProductDetail"));
+const NotFound = createLazyRoute(() => import("./pages/NotFound"));
 
-// Improved loading component
-const PageLoading = () => (
-  <div className="flex flex-col items-center justify-center h-[80vh] gap-4">
-    <div className="w-16 h-16 border-4 border-t-brand border-r-brand border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-    <p className="text-lg font-medium text-gray-600">Loading content...</p>
+// Prefetch strategy for links
+export const prefetchOnHover = (preloadFn) => {
+  return {
+    onMouseEnter: () => preloadFn(),
+    onTouchStart: () => preloadFn(),
+  };
+};
+
+// Improved loading component with skeleton screens
+const PageLoading = ({ withHeader = true }) => (
+  <div className="flex flex-col h-screen">
+    {withHeader && <div className="h-16 bg-gray-100 animate-pulse"></div>}
+    <div className="flex-1 flex flex-col items-center justify-center gap-4 p-4">
+      <div className="w-16 h-16 border-4 border-t-brand border-r-brand border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+      <p className="text-lg font-medium text-gray-600">Loading content...</p>
+    </div>
+    {withHeader && <div className="h-20 bg-gray-100 animate-pulse"></div>}
   </div>
 );
 
@@ -55,6 +58,7 @@ function FloatingCartButton({ onClick }) {
       onClick={onClick}
       className="fixed z-[101] bottom-6 right-6 flex items-center justify-center w-16 h-16 rounded-full gradient-brand glow shadow-2xl border-4 border-white/60 hover:scale-105 transition-transform group"
       aria-label="Open cart"
+      {...prefetchOnHover(Cart.preload)} // Preload cart on hover
     >
       <ShoppingBag className="h-8 w-8 text-white group-hover:scale-110 transition-transform" />
       {itemCount > 0 && (
@@ -69,9 +73,9 @@ function FloatingCartButton({ onClick }) {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 5 * 60 * 1000,
       refetchOnWindowFocus: false,
-      retry: 2, // Retry failed queries twice
+      retry: 2,
     },
   },
 });
@@ -87,19 +91,80 @@ function App() {
             <div className="min-h-screen flex flex-col">
               <Header />
               <main className="flex-1">
-                <Suspense fallback={<PageLoading />}>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/trainings" element={<Trainings />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
+                <Routes>
+                  <Route 
+                    path="/" 
+                    element={
+                      <Suspense fallback={<PageLoading withHeader={false} />}>
+                        <Index.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/shop" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <Shop.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/cart" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <Cart.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/about" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <About.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/contact" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <Contact.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/trainings" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <Trainings.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/blog" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <Blog.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="/product/:id" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <ProductDetail.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                  <Route 
+                    path="*" 
+                    element={
+                      <Suspense fallback={<PageLoading />}>
+                        <NotFound.LazyComponent />
+                      </Suspense>
+                    } 
+                  />
+                </Routes>
               </main>
               <Footer />
               <FloatingCartButton onClick={() => setCartOpen(true)} />
