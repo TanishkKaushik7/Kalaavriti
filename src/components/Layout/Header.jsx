@@ -26,7 +26,7 @@ const Header = () => {
           <div className="relative">
             <div className="absolute -inset-2  rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur"></div>
             <img
-              src="/logo-kalaavritti.png"
+              src="/logo.png"
               alt="Kalaavritti Logo"
               className="relative h-23 w-auto px-5 xobject-contain "
             />
