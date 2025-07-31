@@ -1,128 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Search, Filter, Grid, List, Star, Heart, ShoppingBag, X, ChevronDown, Eye, Sparkles, TrendingUp, Award, Clock, ArrowRight } from 'lucide-react';
 
-// Mock data for demonstration
-const products = [
-  {
-    id: 1,
-    name: "Handwoven Kashmiri Carpet",
-    price: 12500,
-    originalPrice: 15000,
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-    artisan: "Rajesh Kumar",
-    category: "textiles",
-    rating: 4.8,
-    reviews: 127,
-    badge: "Best Seller",
-    description: "Authentic Kashmiri carpet with intricate patterns",
-    isNew: false,
-    isFeatured: true,
-    inStock: true,
-    stockCount: 5
-  },
-  {
-    id: 2,
-    name: "Silver Jhumka Earrings",
-    price: 2800,
-    originalPrice: 3200,
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
-    artisan: "Priya Sharma",
-    category: "jewelry",
-    rating: 4.9,
-    reviews: 89,
-    badge: "New",
-    description: "Traditional silver jhumkas with intricate designs",
-    isNew: true,
-    isFeatured: false,
-    inStock: true,
-    stockCount: 12
-  },
-  {
-    id: 3,
-    name: "Rajasthani Puppet Show Set",
-    price: 3500,
-    originalPrice: 4000,
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-    artisan: "Mohan Lal",
-    category: "gifts",
-    rating: 4.7,
-    reviews: 67,
-    badge: "Limited",
-    description: "Traditional Rajasthani puppets for cultural performances",
-    isNew: false,
-    isFeatured: true,
-    inStock: true,
-    stockCount: 3
-  },
-  {
-    id: 4,
-    name: "Madhubani Painting",
-    price: 4200,
-    originalPrice: 4800,
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-    artisan: "Sunita Devi",
-    category: "paintings",
-    rating: 4.6,
-    reviews: 45,
-    badge: "Trending",
-    description: "Traditional Madhubani painting with vibrant colors",
-    isNew: false,
-    isFeatured: false,
-    inStock: true,
-    stockCount: 8
-  },
-  {
-    id: 5,
-    name: "Brass Decorative Lamp",
-    price: 1800,
-    originalPrice: 2200,
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-    artisan: "Amit Gupta",
-    category: "home-decor",
-    rating: 4.5,
-    reviews: 92,
-    badge: "Popular",
-    description: "Handcrafted brass lamp with traditional motifs",
-    isNew: false,
-    isFeatured: false,
-    inStock: false,
-    stockCount: 0
-  },
-  {
-    id: 6,
-    name: "Silk Rakhi Set",
-    price: 850,
-    originalPrice: 1000,
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
-    artisan: "Kavita Singh",
-    category: "rakhis",
-    rating: 4.8,
-    reviews: 234,
-    badge: "Exclusive",
-    description: "Premium silk rakhis with gold threading",
-    isNew: true,
-    isFeatured: true,
-    inStock: true,
-    stockCount: 25
-  }
-];
-
 const Shop = () => {
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState([0, 20000]);
   const [viewMode, setViewMode] = useState('grid');
   const [wishlist, setWishlist] = useState([]);
-  const [showFilters, setShowFilters] = useState(false);
   const [cart, setCart] = useState([]);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [animateCards, setAnimateCards] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const itemsPerPage = 8;
 
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load products:', err);
+        setIsLoading(false);
+      });
+  }, []);
+  
   const categories = [
     { value: 'all', label: 'All Categories', icon: '🎨' },
     { value: 'jewelry', label: 'Jewelry', icon: '💍' },
